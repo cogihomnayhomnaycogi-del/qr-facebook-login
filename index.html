@@ -5,40 +5,44 @@
   <title>QR Facebook Login</title>
 </head>
 <body>
-  <h2>Đăng nhập bằng Facebook</h2>
 
-  <button onclick="loginFB()">Login Facebook</button>
+<h2>Đăng nhập bằng Facebook</h2>
 
-  <p id="info"></p>
+<button onclick="loginFB()">Login Facebook</button>
 
-  <script>
-    function loginFB() {
-      FB.login(function(response) {
-        if (response.authResponse) {
-          FB.api('/me', {fields: 'id,name,email,picture'}, function(user) {
-            document.getElementById("info").innerHTML =
-              "Xin chào: " + user.name + "<br>ID: " + user.id;
-          });
-        }
-      }, {scope: 'public_profile,email'});
-    }
+<div id="result"></div>
 
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '1403846031319654',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v19.0'
-      });
-    };
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/vi_VN/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1403846031319654',
+      cookie     : true,
+      xfbml      : false,
+      version    : 'v19.0'
+    });
+  };
+
+  function loginFB() {
+    FB.login(function(response) {
+      if (response.status === 'connected') {
+        FB.api('/me', {fields: 'id,name,email'}, function(user) {
+          document.getElementById('result').innerHTML =
+            'ID: ' + user.id + '<br>' +
+            'Name: ' + user.name + '<br>' +
+            'Email: ' + (user.email || 'Không có');
+
+          console.log(user);
+        });
+      } else {
+        alert('User chưa đăng nhập');
+      }
+    }, { scope: 'public_profile,email' });
+  }
+</script>
+
 </body>
 </html>
