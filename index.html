@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>QR Facebook Login</title>
-</head>
-<body>
-
-<h2>Đăng nhập bằng Facebook</h2>
-
 <button onclick="loginFB()">Login Facebook</button>
 
 <div id="result"></div>
@@ -29,20 +19,14 @@
   function loginFB() {
     FB.login(function(response) {
       if (response.status === 'connected') {
-        FB.api('/me', {fields: 'id,name,email'}, function(user) {
+        FB.api('/me', { fields: 'id,name' }, function(user) {
           document.getElementById('result').innerHTML =
-            'ID: ' + user.id + '<br>' +
-            'Name: ' + user.name + '<br>' +
-            'Email: ' + (user.email || 'Không có');
+            'Facebook ID: ' + user.id + '<br>' +
+            'Name: ' + user.name;
 
           console.log(user);
         });
-      } else {
-        alert('User chưa đăng nhập');
       }
-    }, { scope: 'public_profile,email' });
+    }, { scope: 'public_profile' });
   }
 </script>
-
-</body>
-</html>
